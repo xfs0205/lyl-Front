@@ -1,5 +1,5 @@
 <script setup lang="js">
-import left_right_box from '@/components/left_right_box.vue'
+import left_right_box from '@/components/Lists/left_right_box.vue'
 import { ref } from 'vue'
 import {HelpFilled} from "@element-plus/icons-vue"
 const handleNodeClick = (data) => {
@@ -83,7 +83,7 @@ const data2 = ref([
                 <strong style="color: orange;font-style: italic; text-shadow: 2px 2px 4px #000000;">信息发布</strong>
             </div>
             <div style="margin-top: 5px;margin-left: 15px;margin-bottom: 15px;">
-                <div style="color: orange;font-size: 10px; text-align: left;">你好。。。。。。。。。</div>
+                <div style="color: orange;font-size: 10px; text-align: left;">2024年10月18日，建设草原生态监测站</div>
             </div>
         </dv-border-box1>
     </div>
@@ -93,7 +93,7 @@ const data2 = ref([
         padding-right: 10px;padding-top: 20px;
         position: relative;">
             <div class="left">
-                <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick" />
+                <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick" default-expand-all />
             </div>
             <div class="right">
                 <el-scrollbar style="height: 100%;width: 100%; justify-content: center;">

@@ -9,9 +9,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@amap/amap-jsapi-loader": "^1.0.1",
     "@element-plus/icons-vue": "^2.3.1",
     "@kjgl77/datav-vue3": "^1.7.4",
+    "@open-ayame/ayame-web-sdk": "^2022.1.0",
     "@vuemap/vue-amap": "^2.1.8",
+    "@vuemap/vue-amap-extra": "^2.1.5",
     "@vuemap/vue-amap-loca": "^2.1.2",
     "echarts": "^5.5.1",
     "element-plus": "^2.8.6",

@@ -4,7 +4,6 @@ import left_box from '@/components/left_box.vue';
 import center_box from '@/components/center_box.vue';
 import right_box from '@/components/right_box.vue';
 
-
 </script>
 
 <template>
@@ -60,7 +59,7 @@ import right_box from '@/components/right_box.vue';
         flex-direction: column;
         width: 60%;
         height: 100%;
-        background-color: aquamarine;
+        background-color: transparent;
     }
 
     .right {
