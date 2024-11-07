@@ -5,13 +5,9 @@ import Video from '@/components/videos/video.vue'
 import MapContainer from '@/components/groups/MapContainer.vue';
 import Table from '@/components/Lists/table.vue'
 import group1 from '@/components/groups/group1.vue';
+import shangqingJson from '@/assets/shangqing.json';
 
-const data = ref({
-    "head": [],
-    "body": [["张三", "男", "18"], ["李四", "女", "19"],
-    ["张三", "男", "18"], ["李四", "女", "19"],
-    ["张三", "男", "18"], ["李四", "女", "19"],]
-})
+const data = ref(shangqingJson)
 </script>
 
 <template>

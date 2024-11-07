@@ -2,48 +2,14 @@
 import left_right_box from '@/components/Lists/left_right_box.vue'
 import { ref } from 'vue'
 import {HelpFilled} from "@element-plus/icons-vue"
+import shangqingJson from '@/assets/forest.json';
+import device from '@/assets/device.json';
 const handleNodeClick = (data) => {
     console.log(data)
 }
 
 const data = [
-    {
-        label: '江苏省森防站',
-        children: [
-            {
-                label: '南京市森防站',
-                children: [
-                    { label: '六合区林检' },
-                    { label: '南京林业监测' },
-                    { label: '溧水区林检' }
-                ]
-            },
-            {
-                label: '扬州市林业',
-                children: [
-                    { label: '高邮林检' },
-                    { label: '开发区林业监测' },
-                    { label: '广陵林业监测' }
-                ]
-            },
-            {
-                label: '淮安市森防站',
-                children: [
-                    { label: '金湖县林业监测' },
-                    { label: '淮安区林检' },
-                    { label: '淮安市林业站' },
-                    { label: '徐州林业监测' },
-                    { label: '铜山林业监测' }
-                ]
-            },
-            {
-                label: '南通市林业',
-                children: [
-                    { label: '如皋林业监测' }
-                ]
-            }
-        ]
-    },
+    shangqingJson
 ]
 
 const defaultProps = {
@@ -51,28 +17,7 @@ const defaultProps = {
     label: 'label',
 }
 
-const data2 = ref([
-    {row1: "六合2号", row2: "123456789", state: "离线", state_color: "red", number: 'asdf'},
-    {row1: "六合2号", row2: "123456789", state: "离线", state_color: "red", number: 'asdf'},
-    {row1: "六合2号", row2: "123456789", state: "离线", state_color: "red", number: 'asdf'},
-    {row1: "六合2号", row2: "123456789", state: "离线", state_color: "rgb(0,0,0,0)", number: 'asdf'},
-    {row1: "六合2号", row2: "123456789", state: "离线", state_color: "red", number: 'asdf'},
-    {row1: "六合2号", row2: "123456789", state: "离线", state_color: "red", number: 'asdf'},
-    {row1: "六合2号", row2: "123456789", state: "离线", state_color: "red", number: 'asdf'},
-    {row1: "六合2号", row2: "123456789", state: "离线", state_color: "rgb(0,0,0,0)", number: 'asdf'},
-    {row1: "六合2号", row2: "123456789", state: "离线", state_color: "red", number: 'asdf'},
-    {row1: "六合2号", row2: "123456789", state: "离线", state_color: "red", number: 'asdf'},
-    {row1: "六合2号", row2: "123456789", state: "离线", state_color: "red", number: 'asdf'},
-    {row1: "六合2号", row2: "123456789", state: "离线", state_color: "rgb(0,0,0,0)", number: 'asdf'},
-    {row1: "六合2号", row2: "123456789", state: "离线", state_color: "red", number: 'asdf'},
-    {row1: "六合2号", row2: "123456789", state: "离线", state_color: "red", number: 'asdf'},
-    {row1: "六合2号", row2: "123456789", state: "离线", state_color: "red", number: 'asdf'},
-    {row1: "六合2号", row2: "123456789", state: "离线", state_color: "rgb(0,0,0,0)", number: 'asdf'},
-    {row1: "六合2号", row2: "123456789", state: "离线", state_color: "red", number: 'asdf'},
-    {row1: "六合2号", row2: "123456789", state: "离线", state_color: "red", number: 'asdf'},
-    {row1: "六合2号", row2: "123456789", state: "离线", state_color: "red", number: 'asdf'},
-    {row1: "六合2号", row2: "123456789", state: "离线", state_color: "rgb(0,0,0,0)", number: 'asdf'},
-])
+const data2 = ref(device)
 
 </script>
 

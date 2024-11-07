@@ -1,0 +1,30 @@
+[
+    {
+      "row1": "气象",
+      "row2": "草原生态监测站",
+      "state": "在线",
+      "state_color": "red",
+      "number": "asdf"
+    },
+    {
+      "row1": "墒情检测",
+      "row2": "草原生态监测站",
+      "state": "在线",
+      "state_color": "red",
+      "number": "asdf"
+    },
+    {
+      "row1": "生态量监测",
+      "row2": "草原生态监测站",
+      "state": "在线",
+      "state_color": "red",
+      "number": "asdf"
+    },
+    {
+      "row1": "高清监控",
+      "row2": "草原生态监测站",
+      "state": "在线",
+      "state_color": "rgba(0,0,0,0)",
+      "number": "asdf"
+    }
+  ]

@@ -76,8 +76,8 @@ option = {
 
 function generateInsectData(count) {
     let data = [];
-    let xValue = +new Date(2011, 0, 1);
-    let fiveMinutes = 5 * 60 * 1000; // 5分钟的毫秒数
+    let xValue = +new Date(2023, 0, 1);
+    let fiveMinutes = 5 * 60 * 1000*12; // 5分钟的毫秒数
     for (let i = 0; i < count; i++) {
         let insectCount = Math.random() * 100; // 生成一个0到100之间的随机昆虫数
         data[i] = [

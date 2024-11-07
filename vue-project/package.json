@@ -16,6 +16,7 @@
     "@vuemap/vue-amap": "^2.1.8",
     "@vuemap/vue-amap-extra": "^2.1.5",
     "@vuemap/vue-amap-loca": "^2.1.2",
+    "axios": "^1.7.7",
     "echarts": "^5.5.1",
     "element-plus": "^2.8.6",
     "pinia": "^2.2.4",
