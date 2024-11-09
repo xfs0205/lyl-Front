@@ -1,19 +1,23 @@
 <script setup lang="js">
-import { onUnmounted, onMounted, ref, defineProps, h } from 'vue';
+import { onUnmounted, onMounted, ref, defineProps, defineEmits, watch } from 'vue';
 import * as Ayame from '@open-ayame/ayame-web-sdk/dist/ayame.min.js';
 
 const options = Ayame.defaultOptions;
 
 let videoCodec;
 let conn;
-let reConnect = true;
 const remoteVideoElement = ref(null);
 
-
 const props = defineProps({
+  dataChannelName: String,
   signalingUrl: String,
   roomId: String,
   clientId: String,
+  channelid: String,
+  isConnect: {
+    type: Boolean,
+    default: true
+  },
   height: {
     type: Number,
     default: 80
@@ -25,25 +29,28 @@ options.video.direction = 'recvonly';
 options.audio.direction = 'recvonly';
 
 const disconnect = () => {
-  reConnect = false;
   if (conn) {
     conn.disconnect();
   }
 }
 
-const startConn = async () => {
+const startConnVideo = async () => {
   try {
-    reConnect = true;
+    // 视频连接设置
     options.video.codec = videoCodec;
     conn = Ayame.connection(props.signalingUrl, props.roomId, options, true);
     await conn.connect(null);
-    conn.on("open", ({ authzMetadata }) => console.log("连接打开", authzMetadata));
+
+    // 视频连接事件处理
+    conn.on("open", ({ authzMetadata }) => {
+      console.log("视频连接打开");
+    });
     conn.on("disconnect", async (e) => {
       console.log(e);
       if (remoteVideoElement.value) {
         remoteVideoElement.value.srcObject = null;
       }
-      if (reConnect) {
+      if (props.isConnect) {
         await conn.connect(null);
       }
     });
@@ -52,12 +59,24 @@ const startConn = async () => {
     });
   } catch (error) {
     console.error("连接失败:", error);
-    // 这里可以添加更多的错误处理逻辑
   }
 };
 
-onMounted(() => {
-  startConn();
+
+
+onMounted(async () => {
+  startConnVideo();
+});
+
+// 监控isConnect属性的变化
+watch(() => props.isConnect, (newVal, oldVal) => {
+  if (newVal === false && oldVal === true) {
+    disconnect();
+  };
+  if (newVal === true) {
+    console.log("打开连接");
+    startConnVideo();
+  }
 });
 
 onUnmounted(() => {
@@ -65,6 +84,8 @@ onUnmounted(() => {
     disconnect();
   }
 });
+
+
 </script>
 
 <template>

@@ -4,7 +4,6 @@ import { ref } from 'vue'
 import {HelpFilled} from "@element-plus/icons-vue"
 import shangqingJson from '@/assets/forest.json';
 import device from '@/assets/device.json';
-import FxTree from './Lists/fx-tree.vue';
 const handleNodeClick = (data) => {
     console.log(data)
 }
@@ -39,7 +38,7 @@ const data2 = ref(device)
         padding-right: 10px;padding-top: 20px;
         position: relative;">
             <div class="left">
-                <FxTree :data="data" :fscolor="'red'" :fssize="15"></FxTree>
+                <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick" default-expand-all />
             </div>
             <div class="right">
                 <el-scrollbar style="height: 100%;width: 100%; justify-content: center;">

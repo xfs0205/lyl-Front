@@ -5,15 +5,10 @@ import group2 from '@/components/groups/group2.vue';
 import weatherdata from '@/assets/weatherData.json'
 import axios from 'axios';
 
-const data = ref({
-    "head": [],
-    "body": [["张三", "男", "18"], ["李四", "女", "19"], ["李四", "女", "19"], ["李四", "女", "19"], ["李四", "女", "19"], ["李四", "女", "19"], ["李四", "女", "19"], ["李四", "女", "19"], ["李四", "女", "19"], ["李四", "女", "19"],
-    ["张三", "男", "18"], ["李四", "女", "19"], ["李四", "女", "19"], ["李四", "女", "19"], ["李四", "女", "19"], ["李四", "女", "19"], ["李四", "女", "19"], ["李四", "女", "19"], ["李四", "女", "19"], ["李四", "女", "19"]]
-})
 
 // 用于存储从服务器获取的数据
 const newData = ref()
-
+const newData2 = ref()
 // 设置定时器，每隔10秒获取一次数据
 const getData = () =>{
     axios.get('http://47.102.108.198:8899/get')
@@ -21,17 +16,21 @@ const getData = () =>{
             newData.value = {
                 "header": ["日期", "属性", "值"],
                 "data": [
-                    ["温度", re.data.Temperature, "正常"],
-                    ["湿度", re.data.Humidity, "正常"],
-                    ["风速", re.data.WindSpeed, "正常"],
-                    ["风向", re.data.Direction, "正常"],
-                    ["气压", re.data.AirPressure, "正常"],
-                    ["光照", re.data.Lighting, "正常"],
-                    ["降雨量", re.data.Rainfall, "正常"]
+                    ["温度", re.data.weather.Temperature, "正常"],
+                    ["湿度", re.data.weather.Humidity, "正常"],
+                    ["风速", re.data.weather.WindSpeed, "正常"],
+                    ["风向", re.data.weather.Direction, "正常"],
+                    ["气压", re.data.weather.AirPressure, "正常"],
+                    ["光照", re.data.weather.Lighting, "正常"],
+                    ["降雨量", re.data.weather.Rainfall, "正常"]
                 ],
                 "index": true,
                 "columnWidth": [50],
                 "align": ["center"]
+            }
+            newData2.value = {
+                "head": [],
+                "body": [["含水量", re.data.entropy.Water, "正常"], ["温度值", re.data.entropy.Temperature, "正常"], ["电导率", re.data.entropy.ElectricalConductivity, "正常"], ["PH", re.data.entropy.PH, "正常"]], 
             }
         })
         .catch(error => console.error('Error:', error));
@@ -57,7 +56,7 @@ onUnmounted(() => {
             <div style="width: 100%;" h18rem color-white flex justify-center items-center>
                 <strong style="color: orange; text-shadow: 2px 2px 4px #000000;font-size: 12px;">实时墒情信息</strong>
             </div>
-            <Table :data="data" style="height: 80%;width: 80%;margin-left: 10%;" />
+            <Table :data="newData2" style="height: 80%;width: 80%;margin-left: 10%;" :front_size="15" :height="30" />
         </dv-border-box1>
     </div>
     <div class="bottom">
