@@ -12,7 +12,7 @@
         <div style="flex: 0 1 40%">
             <div class="d-flex">
                 <dv-decoration8 style="width:100%;height:50px;flex: 1;" />
-                <div class="index-title">神木林业局生态监测系统</div>
+                <div class="index-title">神木林业局草原生物量监测系统</div>
                 <dv-decoration8 :reverse="true" style="width:100%;height:50px;flex: 1;" />
             </div>
         </div>
