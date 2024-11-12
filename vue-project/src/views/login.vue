@@ -1,62 +1,5 @@
-<template>
-  <div>
-    <div class="login-container">
-      <div
-        class="login-panel"
-        style="
-          background-color: rgb(255, 255, 255, 0.1);
-          border-radius: 10px;
-          width: 20vw;
-          border: 2px solid grey;
-        "
-      >
-        <h2 style="text-align: center; padding: 10px; color: white">
-          用户登录
-        </h2>
-        <div style="padding: 10px">
-          <span style="color: white; padding: 2px">用户账号</span>
-          <input
-            v-model="user.username"
-            type="text"
-            placeholder="请输入账号"
-            style="
-              font-size: 15px;
-              height: 40px;
-              border: 0.5px solid grey;
-              margin-top: 3px;
-            "
-          />
-        </div>
-        <div style="padding-left: 10px; padding-right: 10px">
-          <span style="color: white">用户密码</span>
-          <input
-            v-model="user.password"
-            type="password"
-            placeholder="请输入密码"
-            style="
-              font-size: 15px;
-              height: 40px;
-              border: 0.5px solid grey;
-              margin-top: 3px;
-            "
-          />
-        </div>
-        <div style="padding-left: 10px; padding-right: 10px">
-          <el-button
-            @click="sendPostRequest"
-            size="large"
-            type="primary"
-            style="width: 100%; margin-top: 10px"
-          >
-            立即登录
-          </el-button>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import axios from "axios";
 import { ElMessage } from "element-plus";
 import { useRouter } from 'vue-router';
@@ -66,6 +9,8 @@ const user = ref({
   password: "",
 });
 const router = useRouter();
+// 定义一个响应式变量来存储设备类型
+const deviceType = ref(false);
 // 发送 POST 请求的函数
 const sendPostRequest = async () => {
 
@@ -73,10 +18,10 @@ const sendPostRequest = async () => {
     .post("/fsxback/login", {
       name: user.value.username,
       password: user.value.password,
-    },{
-        withCredentials: true 
+    }, {
+      withCredentials: true
     })
-    .then((re) => {  
+    .then((re) => {
       if (re.data == "success") {
         router.push({ name: 'home' });
       }
@@ -87,7 +32,80 @@ const sendPostRequest = async () => {
       //输入错误
     });
 };
+
+// 函数用于检测设备类型
+const detectDeviceType = () => {
+  const userAgent = navigator.userAgent;
+  if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+    return 'tablet'; // iPad 或者 iPhone
+  } else if (/Android/.test(userAgent)) {
+    if (userAgent.includes('Mobile')) {
+      return 'phone'; // Android 手机
+    } else {
+      return 'tablet'; // Android 平板
+    }
+  } else if (/Windows Phone/.test(userAgent)) {
+    return 'phone'; // Windows Phone
+  } else if (/Macintosh|Linux/.test(userAgent)) {
+    return 'desktop'; // Mac 或 Linux 桌面
+  } else if (/Windows NT/.test(userAgent)) {
+    return 'desktop'; // Windows 桌面
+  } else {
+    return 'unknown'; // 未知设备
+  }
+};
+
+onMounted(() => {
+  // 在页面加载时调用函数
+  deviceType.value = (detectDeviceType() == 'desktop');
+  console.log('Device type:', deviceType.value);
+});
 </script>
+
+
+<template>
+  <div v-if="deviceType">
+    <div class="login-container">
+      <div class="login-panel" style="
+          background-color: rgb(255, 255, 255, 0.1);
+          border-radius: 10px;
+          width: 20vw;
+          border: 2px solid grey;
+        ">
+        <h2 style="text-align: center; padding: 10px; color: white">
+          用户登录
+        </h2>
+        <div style="padding: 10px">
+          <span style="color: white; padding: 2px">用户账号</span>
+          <input v-model="user.username" type="text" placeholder="请输入账号" style="
+              font-size: 15px;
+              height: 40px;
+              border: 0.5px solid grey;
+              margin-top: 3px;
+            " />
+        </div>
+        <div style="padding-left: 10px; padding-right: 10px">
+          <span style="color: white">用户密码</span>
+          <input v-model="user.password" type="password" placeholder="请输入密码" style="
+              font-size: 15px;
+              height: 40px;
+              border: 0.5px solid grey;
+              margin-top: 3px;
+            " />
+        </div>
+        <div style="padding-left: 10px; padding-right: 10px">
+          <el-button @click="sendPostRequest" size="large" type="primary" style="width: 100%; margin-top: 10px">
+            立即登录
+          </el-button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div v-else style="height: 100vh;width: 100vw;display: flex;justify-content: center;align-items: center;">
+    <span style="color: aqua;">请使用电脑查看！！！</span>
+  </div>
+</template>
+
 <style scoped lang="scss">
 .login-container {
   display: flex;
