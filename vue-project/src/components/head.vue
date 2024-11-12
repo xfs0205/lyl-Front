@@ -11,9 +11,9 @@
         </div>
         <div style="flex: 0 1 40%">
             <div class="d-flex">
-                <dv-decoration8 style="width:300px;height:50px;flex: 1;" />
-                <div class="index-title">XXX草原生态检测系统</div>
-                <dv-decoration8 :reverse="true" style="width:300px;height:50px;flex: 1;" />
+                <dv-decoration8 style="width:100%;height:50px;flex: 1;" />
+                <div class="index-title">神木林业局生态监测系统</div>
+                <dv-decoration8 :reverse="true" style="width:100%;height:50px;flex: 1;" />
             </div>
         </div>
         <div style="flex:0 1 30%">

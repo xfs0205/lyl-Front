@@ -4,7 +4,7 @@
 </script>
 
 <template>
-  <div class="left_right_box button">
+  <div class="left_right_box button" style="justify-content: center;">
     <div style="text-align: left;font-size: 10px;white-space: nowrap; margin-top: 3px;margin-bottom: 5px;">
         <slot name="title"></slot>
     </div>
@@ -25,7 +25,7 @@
 .left_right_box > div {
     flex: 1; /* 子元素平均分配剩余空间 */
     display: flex;
-    padding-left: 4px;
+    padding-left: 10px;
     align-items: center; /* 垂直居中对齐文本 */
 }
 
@@ -38,6 +38,7 @@
     color: #333; /* 文字颜色 */
     text-align: center; /* 文字居中 */
     cursor: pointer; /* 鼠标悬停时显示手型 */
+    margin-left: 12px;
 }
 
 /* 文本样式 */
@@ -45,10 +46,12 @@
     font-size: 14px; /* 字体大小 */
     color: #666; /* 文字颜色 */
     margin: 0 5px; /* 文字之间的间距 */
+    padding-left: 10px;
 }
 
 /* 特殊文本样式，例如“离线” */
 .text-offline {
     color: red; /* 红色文字 */
+    padding-left: 10px;
 }
 </style>

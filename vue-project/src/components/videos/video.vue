@@ -1,5 +1,5 @@
 <script setup lang="js">
-import { onUnmounted, onMounted, ref, defineProps, defineEmits, watch } from 'vue';
+import { onUnmounted, onMounted, ref, defineProps, watch } from 'vue';
 import * as Ayame from '@open-ayame/ayame-web-sdk/dist/ayame.min.js';
 
 const options = Ayame.defaultOptions;
@@ -7,6 +7,7 @@ const options = Ayame.defaultOptions;
 let videoCodec;
 let conn;
 const remoteVideoElement = ref(null);
+
 
 const props = defineProps({
   dataChannelName: String,
@@ -90,13 +91,14 @@ onUnmounted(() => {
 
 <template>
   <div class="vedio-p" :style="{ height: props.height + '%' }">
-    <video id="remote-video" autoplay playsinline controls ref="remoteVideoElement"></video>
+    <video id="remote-video"  autoplay playsinline controls height="100%" width="100%" ref="remoteVideoElement">
+    </video>
   </div>
 </template>
 
 <style scoped lang="scss">
 .vedio-p {
   display: flex;
-  margin-left: 10%;
-}
+  margin-left: 0;
+} 
 </style>

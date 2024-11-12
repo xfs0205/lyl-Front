@@ -7,6 +7,7 @@ import Table from '@/components/Lists/table.vue'
 import group1 from '@/components/groups/group1.vue';
 import shangqingJson from '@/assets/shangqing.json';
 import * as Ayame from '@open-ayame/ayame-web-sdk/dist/ayame.min.js';
+import screenfull from "screenfull";
 import { Right, TopLeft, Top, TopRight, BottomRight, Bottom, BottomLeft, Back } from '@element-plus/icons-vue';
 
 const options = Ayame.defaultOptions;
@@ -17,15 +18,24 @@ const datachannel = ref()
 const speed = ref(24)
 const isConnect1 = ref(true)
 const isConnect2 = ref(true)
+const isFullscreen = ref(false)
+
+const video1 = ref(null)
+const video2 = ref(null)
 
 options.clientId = utils.clientId ? utils.clientId : options.clientId;
 options.video.direction = 'recvonly';
 options.audio.direction = 'recvonly';
 
+screenfull.on('change', () => {
+  // 更新你的应用状态
+  isFullscreen.value = screenfull.isFullscreen;
+});
+
 const startDataChannel = async () => {
   try {
     console.log("开始创建数据通道1");
-    
+
     conn4dc.value = Ayame.connection(utils.signalingUrl, utils.channelid, options, true)
 
     conn4dc.value.on('open', async (e) => {
@@ -68,16 +78,16 @@ const toUp = (index) => {
     ]);
 
   }
-  else if (index === 2){
+  else if (index === 2) {
     onvif_cmd = new Uint8Array([
-        0x90,             // head
-        0x0e, 0x00, 0xa8, 0xc0, // ip (4 bytes)
-        0x00, 0x50,       // port (2 bytes)
-        0x00, 0x01,       // command (2 bytes)
-        0x00,             // xx
-        speedf,             // yy (速度为8)
-        0xff              // end
-      ]);
+      0x90,             // head
+      0x0e, 0x00, 0xa8, 0xc0, // ip (4 bytes)
+      0x00, 0x50,       // port (2 bytes)
+      0x00, 0x01,       // command (2 bytes)
+      0x00,             // xx
+      speedf,             // yy (速度为8)
+      0xff              // end
+    ]);
   }
   else
     return
@@ -93,26 +103,26 @@ const toUp = (index) => {
 const toRight = (index) => {
   let speedf = speed.value.toString(16)
   let onvif_cmd
-  if (index === 1){
+  if (index === 1) {
     onvif_cmd = new Uint8Array([
-    0x90,             // head
-    0x0d, 0x00, 0xa8, 0xc0, // ip (4 bytes)
-    0x00, 0x50,       // port (2 bytes)
-    0x00, 0x04,       // command (2 bytes)
-    speedf,             // xx
-    0x00,             // yy (速度为8)
-    0xff              // end
-  ]);
+      0x90,             // head
+      0x0d, 0x00, 0xa8, 0xc0, // ip (4 bytes)
+      0x00, 0x50,       // port (2 bytes)
+      0x00, 0x04,       // command (2 bytes)
+      speedf,             // xx
+      0x00,             // yy (速度为8)
+      0xff              // end
+    ]);
   }
-  else if (index === 2){
-    onvif_cmd = new Uint8Array([  
-        0x90,             // head
-        0x0e, 0x00, 0xa8, 0xc0, // ip (4 bytes)
-        0x00, 0x50,       // port (2 bytes)
-        0x00, 0x04,       // command (2 bytes)
-        speedf,             // xx
-        0x00,             // yy (速度为8)
-        0xff              // end
+  else if (index === 2) {
+    onvif_cmd = new Uint8Array([
+      0x90,             // head
+      0x0e, 0x00, 0xa8, 0xc0, // ip (4 bytes)
+      0x00, 0x50,       // port (2 bytes)
+      0x00, 0x04,       // command (2 bytes)
+      speedf,             // xx
+      0x00,             // yy (速度为8)
+      0xff              // end
     ])
   }
 
@@ -130,33 +140,33 @@ const toRight = (index) => {
 const toDown = (index) => {
   let speedf = speed.value.toString(16)
   let onvif_cmd
-  if (index === 1){
+  if (index === 1) {
     onvif_cmd = new Uint8Array([
-    0x90,             // head
-    0x0d, 0x00, 0xa8, 0xc0, // ip (4 bytes)
-    0x00, 0x50,       // port (2 bytes)
-    0x00, 0x02,       // command (2 bytes)
-    0x00,             // xx
-    speedf,             // yy (速度为8)
-    0xff              // end
+      0x90,             // head
+      0x0d, 0x00, 0xa8, 0xc0, // ip (4 bytes)
+      0x00, 0x50,       // port (2 bytes)
+      0x00, 0x02,       // command (2 bytes)
+      0x00,             // xx
+      speedf,             // yy (速度为8)
+      0xff              // end
     ]);
   }
-    
-  else if (index === 2){
+
+  else if (index === 2) {
     onvif_cmd = new Uint8Array([
-        0x90,             // head
-        0x0e, 0x00, 0xa8, 0xc0, // ip (4 bytes)
-        0x00, 0x50,       // port (2 bytes)
-        0x00, 0x02,       // command (2 bytes)
-        0x00,             // xx
-        speedf,             // yy (速度为8)
-        0xff  
+      0x90,             // head
+      0x0e, 0x00, 0xa8, 0xc0, // ip (4 bytes)
+      0x00, 0x50,       // port (2 bytes)
+      0x00, 0x02,       // command (2 bytes)
+      0x00,             // xx
+      speedf,             // yy (速度为8)
+      0xff
     ])
   }
 
   else
     return
-  
+
 
   if (datachannel.value && datachannel.value.readyState === 'open') {
     datachannel.value.send(onvif_cmd);  // 直接发送字节数组
@@ -169,28 +179,28 @@ const toDown = (index) => {
 const toLeft = (index) => {
   let speedf = speed.value.toString(16)
   let onvif_cmd
-  if (index === 1){
+  if (index === 1) {
     onvif_cmd = new Uint8Array([
-    0x90,             // head
-    0x0d, 0x00, 0xa8, 0xc0, // ip (4 bytes)
-    0x00, 0x50,       // port (2 bytes)
-    0x00, 0x03,       // command (2 bytes)
-    speedf,             // xx
-    0x00,             // yy (速度为8)
-    0xff              // end 
+      0x90,             // head
+      0x0d, 0x00, 0xa8, 0xc0, // ip (4 bytes)
+      0x00, 0x50,       // port (2 bytes)
+      0x00, 0x03,       // command (2 bytes)
+      speedf,             // xx
+      0x00,             // yy (速度为8)
+      0xff              // end 
     ]);
   }
-   
-  else if (index === 2){
+
+  else if (index === 2) {
     onvif_cmd = new Uint8Array([
-        0x90,             // head
-        0x0e, 0x00, 0xa8, 0xc0, // ip (4 bytes)
-        0x00, 0x50,       // port (2 bytes)
-        0x00, 0x03,       // command (2 bytes)
-        speedf,             // xx
-        0x00,             // yy (速度为8)
-        0xff              // end
-      ]);
+      0x90,             // head
+      0x0e, 0x00, 0xa8, 0xc0, // ip (4 bytes)
+      0x00, 0x50,       // port (2 bytes)
+      0x00, 0x03,       // command (2 bytes)
+      speedf,             // xx
+      0x00,             // yy (速度为8)
+      0xff              // end
+    ]);
   }
 
   else
@@ -208,28 +218,28 @@ const toLeft = (index) => {
 // 停止
 const toStop = (index) => {
   let onvif_cmd
-  if (index === 1){
+  if (index === 1) {
     onvif_cmd = new Uint8Array([
-    0x90,
-    0x0d, 0x00, 0xa8, 0xc0,
-    0x00, 0x50,
-    0x00, 0x00,
-    0x00,
-    0x00,
-    0xff
-  ]);
+      0x90,
+      0x0d, 0x00, 0xa8, 0xc0,
+      0x00, 0x50,
+      0x00, 0x00,
+      0x00,
+      0x00,
+      0xff
+    ]);
   }
 
-  else if (index === 2){
+  else if (index === 2) {
     onvif_cmd = new Uint8Array([
-        0x90,
-        0x0e, 0x00, 0xa8, 0xc0,
-        0x00, 0x50,
-        0x00, 0x00,
-        0x00,
-        0x00,
-        0xff
-      ]);
+      0x90,
+      0x0e, 0x00, 0xa8, 0xc0,
+      0x00, 0x50,
+      0x00, 0x00,
+      0x00,
+      0x00,
+      0xff
+    ]);
   }
 
   else
@@ -247,30 +257,30 @@ const toStop = (index) => {
 const toLeftUp = (index) => {
   let speedf = speed.value.toString(16)
   let onvif_cmd
-  if (index === 1){
+  if (index === 1) {
     onvif_cmd = new Uint8Array([
-    0x90,
-    0x0d, 0x00, 0xa8, 0xc0,
-    0x00, 0x50,
-    0x00, 0x05,
-    speedf,
-    speedf,
-    0xff
-  ]);
+      0x90,
+      0x0d, 0x00, 0xa8, 0xc0,
+      0x00, 0x50,
+      0x00, 0x05,
+      speedf,
+      speedf,
+      0xff
+    ]);
   }
 
-  else if (index === 2){
+  else if (index === 2) {
     onvif_cmd = new Uint8Array([
-        0x90,
-        0x0e, 0x00, 0xa8, 0xc0,
-        0x00, 0x50,
-        0x00, 0x05,
-        speedf,
-        speedf,
-        0xff
-      ]);
+      0x90,
+      0x0e, 0x00, 0xa8, 0xc0,
+      0x00, 0x50,
+      0x00, 0x05,
+      speedf,
+      speedf,
+      0xff
+    ]);
   }
- 
+
   else
     return
 
@@ -286,28 +296,28 @@ const toLeftUp = (index) => {
 const toRightUp = (index) => {
   let speedf = speed.value.toString(16)
   let onvif_cmd
-  if (index === 1){
+  if (index === 1) {
     onvif_cmd = new Uint8Array([
-    0x90,
-    0x0d, 0x00, 0xa8, 0xc0,
-    0x00, 0x50,
-    0x00, 0x06,
-    speedf,
-    speedf,
-    0xff
-  ]);
+      0x90,
+      0x0d, 0x00, 0xa8, 0xc0,
+      0x00, 0x50,
+      0x00, 0x06,
+      speedf,
+      speedf,
+      0xff
+    ]);
   }
 
-  else if (index === 2){
+  else if (index === 2) {
     onvif_cmd = new Uint8Array([
-        0x90,
-        0x0e, 0x00, 0xa8, 0xc0,
-        0x00, 0x50,
-        0x00, 0x06,
-        speedf,
-        speedf,
-        0xff
-      ]);
+      0x90,
+      0x0e, 0x00, 0xa8, 0xc0,
+      0x00, 0x50,
+      0x00, 0x06,
+      speedf,
+      speedf,
+      0xff
+    ]);
   }
 
   else
@@ -325,28 +335,28 @@ const toRightUp = (index) => {
 const toRightDown = (index) => {
   let speedf = speed.value.toString(16)
   let onvif_cmd
-  if (index === 1){
+  if (index === 1) {
     onvif_cmd = new Uint8Array([
-    0x90,
-    0x0d, 0x00, 0xa8, 0xc0,
-    0x00, 0x50,
-    0x00, 0x08,
-    speedf,
-    speedf,
-    0xff
-  ]);
+      0x90,
+      0x0d, 0x00, 0xa8, 0xc0,
+      0x00, 0x50,
+      0x00, 0x08,
+      speedf,
+      speedf,
+      0xff
+    ]);
   }
 
-  else if (index === 2){
+  else if (index === 2) {
     onvif_cmd = new Uint8Array([
-        0x90,
-        0x0e, 0x00, 0xa8, 0xc0,
-        0x00, 0x50,
-        0x00, 0x08,
-        speedf,
-        speedf,
-        0xff
-      ]);
+      0x90,
+      0x0e, 0x00, 0xa8, 0xc0,
+      0x00, 0x50,
+      0x00, 0x08,
+      speedf,
+      speedf,
+      0xff
+    ]);
   }
   else
     return
@@ -362,33 +372,33 @@ const toRightDown = (index) => {
 const toLeftDown = (index) => {
   let speedf = speed.value.toString(16)
   let onvif_cmd
-  if (index === 1){
+  if (index === 1) {
     onvif_cmd = new Uint8Array([
-    0x90,
-    0x0d, 0x00, 0xa8, 0xc0,
-    0x00, 0x50,
-    0x00, 0x07,
-    speedf,
-    speedf,
-    0xff
-  ]);
+      0x90,
+      0x0d, 0x00, 0xa8, 0xc0,
+      0x00, 0x50,
+      0x00, 0x07,
+      speedf,
+      speedf,
+      0xff
+    ]);
   }
 
-  else if (index === 2){
+  else if (index === 2) {
     onvif_cmd = new Uint8Array([
-        0x90,
-        0x0e, 0x00, 0xa8, 0xc0,
-        0x00, 0x50,
-        0x00, 0x07,
-        speedf,
-        speedf,
-        0xff
-      ]);
+      0x90,
+      0x0e, 0x00, 0xa8, 0xc0,
+      0x00, 0x50,
+      0x00, 0x07,
+      speedf,
+      speedf,
+      0xff
+    ]);
   }
 
   else
     return
-  
+
 
   if (datachannel.value && datachannel.value.readyState === 'open') {
     datachannel.value.send(onvif_cmd);  // 直接发送字节数组
@@ -401,28 +411,28 @@ const toLeftDown = (index) => {
 const toZoomIn = (index) => {
   let speedf = speed.value.toString(16)
   let onvif_cmd
-  if (index === 1){
+  if (index === 1) {
     onvif_cmd = new Uint8Array([
-    0x90,
-    0x0d, 0x00, 0xa8, 0xc0,
-    0x00, 0x50,
-    0x00, 0x0a,
-    speedf,
-    0x00,
-    0xff
-  ]);
+      0x90,
+      0x0d, 0x00, 0xa8, 0xc0,
+      0x00, 0x50,
+      0x00, 0x0a,
+      speedf,
+      0x00,
+      0xff
+    ]);
   }
 
-  else if (index === 2){
+  else if (index === 2) {
     onvif_cmd = new Uint8Array([
-        0x90,
-        0x0e, 0x00, 0xa8, 0xc0,
-        0x00, 0x50,
-        0x00, 0x0a,
-        speedf,
-        0x00,
-        0xff
-      ]);
+      0x90,
+      0x0e, 0x00, 0xa8, 0xc0,
+      0x00, 0x50,
+      0x00, 0x0a,
+      speedf,
+      0x00,
+      0xff
+    ]);
   }
 
   else
@@ -439,30 +449,30 @@ const toZoomIn = (index) => {
 const toZoomOut = (index) => {
   let speedf = speed.value.toString(16)
   let onvif_cmd
-  if (index === 1){
+  if (index === 1) {
     onvif_cmd = new Uint8Array([
-    0x90,
-    0x0d, 0x00, 0xa8, 0xc0,
-    0x00, 0x50,
-    0x00, 0x0b,
-    speedf,
-    0x00,
-    0xff
-  ]);
+      0x90,
+      0x0d, 0x00, 0xa8, 0xc0,
+      0x00, 0x50,
+      0x00, 0x0b,
+      speedf,
+      0x00,
+      0xff
+    ]);
   }
 
-  else if (index === 2){
+  else if (index === 2) {
     onvif_cmd = new Uint8Array([
-        0x90,
-        0x0e, 0x00, 0xa8, 0xc0,
-        0x00, 0x50,
-        0x00, 0x0b,
-        speedf,
-        0x00,
-        0xff
-      ]);
+      0x90,
+      0x0e, 0x00, 0xa8, 0xc0,
+      0x00, 0x50,
+      0x00, 0x0b,
+      speedf,
+      0x00,
+      0xff
+    ]);
   }
- 
+
   else
     return
 
@@ -475,28 +485,28 @@ const toZoomOut = (index) => {
 }
 // 停止
 const toZoomStop = (index) => {
-  if (index === 1){
+  if (index === 1) {
     onvif_cmd = new Uint8Array([
-    0x90,
-    0x0d, 0x00, 0xa8, 0xc0,
-    0x00, 0x50,
-    0x00, 0x09,
-    0x00,
-    0x00,
-    0xff
-  ]);
+      0x90,
+      0x0d, 0x00, 0xa8, 0xc0,
+      0x00, 0x50,
+      0x00, 0x09,
+      0x00,
+      0x00,
+      0xff
+    ]);
   }
 
-  else if (index === 2){
-  onvif_cmd = new Uint8Array([
-        0x90,
-        0x0e, 0x00, 0xa8, 0xc0,
-        0x00, 0x50,
-        0x00, 0x09,
-        0x00,
-        0x00,
-        0xff
-      ]);
+  else if (index === 2) {
+    onvif_cmd = new Uint8Array([
+      0x90,
+      0x0e, 0x00, 0xa8, 0xc0,
+      0x00, 0x50,
+      0x00, 0x09,
+      0x00,
+      0x00,
+      0xff
+    ]);
   }
 
   else
@@ -514,28 +524,28 @@ const toZoomStop = (index) => {
 const toFocusIn = (index) => {
   let speedf = speed.value.toString(16)
   let onvif_cmd
-  if (index === 1){
+  if (index === 1) {
     onvif_cmd = new Uint8Array([
-    0x90,
-    0x0d, 0x00, 0xa8, 0xc0,
-    0x00, 0x50,
-    0x00, 0x0f,
-    speedf,
-    0x00,
-    0xff
-  ]);
+      0x90,
+      0x0d, 0x00, 0xa8, 0xc0,
+      0x00, 0x50,
+      0x00, 0x0f,
+      speedf,
+      0x00,
+      0xff
+    ]);
   }
 
-  else if (index === 2){
+  else if (index === 2) {
     onvif_cmd = new Uint8Array([
-        0x90,
-        0x0e, 0x00, 0xa8, 0xc0,
-        0x00, 0x50,
-        0x00, 0x0f,
-        speedf,
-        0x00,
-        0xff
-      ]);
+      0x90,
+      0x0e, 0x00, 0xa8, 0xc0,
+      0x00, 0x50,
+      0x00, 0x0f,
+      speedf,
+      0x00,
+      0xff
+    ]);
   }
 
   else
@@ -553,33 +563,33 @@ const toFocusIn = (index) => {
 const toFocusOut = (index) => {
   let speedf = speed.value.toString(16)
   let onvif_cmd
-  if (index === 1){
+  if (index === 1) {
     onvif_cmd = new Uint8Array([
-    0x90,
-    0x0d, 0x00, 0xa8, 0xc0,
-    0x00, 0x50,
-    0x00, 0x10,
-    speedf,
-    0x00,
-    0xff
-  ]);
+      0x90,
+      0x0d, 0x00, 0xa8, 0xc0,
+      0x00, 0x50,
+      0x00, 0x10,
+      speedf,
+      0x00,
+      0xff
+    ]);
   }
 
-  else if (index === 2){
+  else if (index === 2) {
     onvif_cmd = new Uint8Array([
-        0x90,
-        0x0e, 0x00, 0xa8, 0xc0,
-        0x00, 0x50,
-        0x00, 0x10,
-        speedf,
-        0x00,
-        0xff
-      ]);
+      0x90,
+      0x0e, 0x00, 0xa8, 0xc0,
+      0x00, 0x50,
+      0x00, 0x10,
+      speedf,
+      0x00,
+      0xff
+    ]);
   }
 
   else
     return
- 
+
 
   if (datachannel.value && datachannel.value.readyState === 'open') {
     datachannel.value.send(onvif_cmd);  // 直接发送字节数组
@@ -591,28 +601,28 @@ const toFocusOut = (index) => {
 // 停止调焦
 const toFocusStop = (index) => {
   let onvif_cmd
-  if (index === 1){
+  if (index === 1) {
     onvif_cmd = new Uint8Array([
-    0x90,
-    0x0d, 0x00, 0xa8, 0xc0,
-    0x00, 0x50,
-    0x00, 0x0e,
-    0x00,
-    0x00,
-    0xff
-  ]);
+      0x90,
+      0x0d, 0x00, 0xa8, 0xc0,
+      0x00, 0x50,
+      0x00, 0x0e,
+      0x00,
+      0x00,
+      0xff
+    ]);
   }
 
-  else if (index === 2){
+  else if (index === 2) {
     onvif_cmd = new Uint8Array([
-        0x90,
-        0x0e, 0x00, 0xa8, 0xc0,
-        0x00, 0x50,
-        0x00, 0x0e,
-        0x00,
-        0x00,
-        0xff
-      ]);
+      0x90,
+      0x0e, 0x00, 0xa8, 0xc0,
+      0x00, 0x50,
+      0x00, 0x0e,
+      0x00,
+      0x00,
+      0xff
+    ]);
 
   }
 
@@ -637,6 +647,23 @@ const clickIsConnect = (index) => {
     return
 }
 
+const toggleFullScreen1 = () => {
+  if (screenfull.isEnabled) {
+    screenfull.toggle(video1.value);
+  }
+  if (screenfull.isFullscreen) {
+    screenfull.exit();
+  }
+}
+const toggleFullScreen2 = () => {
+  if (screenfull.isEnabled) {
+    screenfull.toggle(video2.value);
+  }
+  if (screenfull.isFullscreen) {
+    screenfull.exit();
+  }
+}
+
 </script>
 
 <template>
@@ -650,30 +677,31 @@ const clickIsConnect = (index) => {
               font-style: italic;
               text-shadow: 2px 2px 4px #000000;
               font-size: 17px;
-            ">实时监控一</strong>
+            ">实时监控</strong>
         </div>
-        <div style="
+        <div ref="video1" style="
             height: 77%;
             width: 100%;
             padding: 0;
             display: flex;
+            justify-content: center;
+            align-items: center;
             position: relative;
           ">
-          <!-- 按钮在这写 -->
-          <div style="
+          <div v-if="!isFullscreen" style="
               display: flex;
               align-items: center;
               position: absolute;
-              right: 23px;
+              right: 40px;
               top: 3px;
               z-index: 1000;
             ">
             <el-popover ref="popover" placement="right" title="控制面板" :width="170" trigger="focus">
               <template #reference>
-                <el-button  class="m-2" style="background-color: rgb(255,255,255,0.3);color: white;">调整</el-button>
+                <el-button class="m-2" style="background-color: rgb(255,255,255,0.3);color: white;">调整</el-button>
               </template>
 
-              <div style="height: 230px;width: 100%;background-color: rgb(0,0,0,0.3);position: relative;">
+              <div style="height: 270px;width: 100%;background-color: rgb(0,0,0,0.3);position: relative;">
                 <el-button @mousedown="toLeftUp(1)" @mouseup="toStop(1)" :icon="TopLeft"
                   style="position: absolute;top: 2px;left:10px" circle />
                 <el-button @mousedown="toUp(1)" @mouseup="toStop(1)" :icon="Top"
@@ -702,9 +730,57 @@ const clickIsConnect = (index) => {
                   style="position: absolute;top: 50px;left: 32px;">关闭</el-button>
                 <el-button v-show="!isConnect1" @click="clickIsConnect(1)"
                   style="position: absolute;top: 50px;left: 32px;">打开</el-button>
+                <el-button @click="toggleFullScreen1" style="position: absolute;bottom: 10px;left: 1px;">
+                  {{ isFullscreen ? '关闭宽屏模式' : '打开宽屏模式' }}
+                </el-button>
 
               </div>
             </el-popover>
+          </div>
+          <div v-if="isFullscreen" style="
+              display: flex;
+              align-items: center;
+              position: absolute;
+              right: 40px;
+              top: 20px;
+              z-index: 1000;
+              width: 145px;
+              background-color: transparent;
+            ">
+            <div style="height: 270px;width: 100%;background-color: rgb(0,0,0,0);position: relative;">
+              <el-button @mousedown="toLeftUp(1)" @mouseup="toStop(1)" :icon="TopLeft"
+                style="position: absolute;top: 2px;left:10px" circle />
+              <el-button @mousedown="toUp(1)" @mouseup="toStop(1)" :icon="Top"
+                style="position: absolute;top: 2px;left:44px" circle />
+              <el-button @mousedown="toRightUp(1)" @mouseup="toStop(1)" :icon="TopRight"
+                style="position: absolute;top: 2px;right:10px" circle />
+              <el-button @mousedown="toRight(1)" @mouseup="toStop(1)" :icon="Right"
+                style="position: absolute;top: 50px;right:10px" circle />
+              <el-button @mousedown="toRightDown(1)" @mouseup="toStop(1)" :icon="BottomRight"
+                style="position: absolute;top: 100px;right:10px" circle />
+              <el-button @mousedown="toDown(1)" @mouseup="toStop(1)" :icon="Bottom"
+                style="position: absolute;top: 100px;left:44px" circle />
+              <el-button @mousedown="toLeftDown(1)" @mouseup="toStop(1)" :icon="BottomLeft"
+                style="position: absolute;top: 100px;left:0" circle />
+              <el-button @mousedown="toLeft(1)" @mouseup="toStop(1)" :icon="Back"
+                style="position: absolute;top: 50px;left:0" circle />
+              <el-button @mousedown="toZoomIn(1)" @mouseup="toZoomStop(1)"
+                style="position: absolute;top: 150px;left: 0px;">放大</el-button>
+              <el-button @mousedown="toZoomOut(1)" @mouseup="toZoomStop(1)"
+                style="position: absolute;top: 150px;left: 60px;">缩小</el-button>
+              <el-button @mousedown="toFocusIn(1)" @mouseup="toFocusStop(1)"
+                style="position: absolute;top: 190px;left: 0px;">缩聚</el-button>
+              <el-button @mousedown="toFocusOut(1)" @mouseup="toFocusStop(1)"
+                style="position: absolute;top: 190px;left: 60px;">放聚</el-button>
+              <el-button v-show="isConnect1" @click="clickIsConnect(1)"
+                style="position: absolute;top: 50px;left: 32px;">关闭</el-button>
+              <el-button v-show="!isConnect1" @click="clickIsConnect(1)"
+                style="position: absolute;top: 50px;left: 32px;">打开</el-button>
+              <el-button @click="toggleFullScreen1" style="position: absolute;bottom: 10px;left: 1px;">
+                {{ isFullscreen ? '关闭宽屏模式' : '打开宽屏模式' }}
+              </el-button>
+
+            </div>
           </div>
           <Video :dataChannelName="'video1'" :isConnect="isConnect1" :channelid="utils.channelid"
             :signalingUrl="utils.signalingUrl" :roomId="utils.roomId1" :clientId="utils.clientId" :height="100" />
@@ -732,26 +808,27 @@ const clickIsConnect = (index) => {
               font-style: italic;
               text-shadow: 2px 2px 4px #000000;
               font-size: 17px;
-            ">实时监控二</strong>
+            ">生物量监测</strong>
         </div>
-        <div style="height: 77%; width: 100%; padding: 0; display: flex; position: relative;">
-          <Video  :dataChannelName="'video2'" :isConnect="isConnect2" :channelid="utils.channelid"
+        <div ref="video2" style="height: 77%; width: 100%; padding: 0; display: flex; position: relative;            justify-content: center;
+            align-items: center;">
+          <Video :dataChannelName="'video2'" :isConnect="isConnect2" :channelid="utils.channelid"
             :signalingUrl="utils.signalingUrl" :roomId="utils.roomId2" :clientId="utils.clientId" :height="100" />
 
-          <div style="
+          <div v-if="!isFullscreen" style="
               display: flex;
               align-items: center;
               position: absolute;
-              right: 23px;
+              right: 40px;
               top: 3px;
-              z-index: 1000;
+              z-index: 1001;
             ">
-            <el-popover  ref="popover" placement="right" title="控制面板" :width="170" trigger="focus">
+            <el-popover ref="popover" placement="right" title="控制面板" :width="170" trigger="focus">
               <template #reference>
                 <el-button class="m-2" style="background-color: rgb(255,255,255,0.3);color: white;">调整</el-button>
               </template>
 
-              <div style="height: 230px;width: 100%;background-color: rgb(0,0,0,0.3);position: relative;">
+              <div style="height: 270px;width: 100%;background-color: rgb(0,0,0,0.3);position: relative;">
                 <el-button @mousedown="toLeftUp(2)" @mouseup="toStop(2)" :icon="TopLeft"
                   style="position: absolute;top: 2px;left:10px" circle />
                 <el-button @mousedown="toUp(2)" @mouseup="toStop(2)" :icon="Top"
@@ -780,8 +857,55 @@ const clickIsConnect = (index) => {
                   style="position: absolute;top: 50px;left: 32px;">关闭</el-button>
                 <el-button v-show="!isConnect2" @click="clickIsConnect(2)"
                   style="position: absolute;top: 50px;left: 32px;">打开</el-button>
+                <el-button @click="toggleFullScreen2" style="position: absolute;bottom: 10px;left: 1px;">
+                  {{ isFullscreen ? '关闭宽屏模式' : '打开宽屏模式' }}
+                </el-button>
               </div>
             </el-popover>
+          </div>
+          <div v-if="isFullscreen" style="
+              display: flex;
+              align-items: center;
+              position: absolute;
+              right: 40px;
+              top: 20px;
+              z-index: 1000;
+              width: 145px;
+              background-color: transparent;
+            ">
+            <div style="height: 270px;width: 100%;background-color: rgb(0,0,0,0);position: relative;">
+              <el-button @mousedown="toLeftUp(2)" @mouseup="toStop(2)" :icon="TopLeft"
+                style="position: absolute;top: 2px;left:10px" circle />
+              <el-button @mousedown="toUp(2)" @mouseup="toStop(2)" :icon="Top"
+                style="position: absolute;top: 2px;left:44px" circle />
+              <el-button @mousedown="toRightUp(2)" @mouseup="toStop(2)" :icon="TopRight"
+                style="position: absolute;top: 2px;right:10px" circle />
+              <el-button @mousedown="toRight(2)" @mouseup="toStop(2)" :icon="Right"
+                style="position: absolute;top: 50px;right:10px" circle />
+              <el-button @mousedown="toRightDown(2)" @mouseup="toStop(2)" :icon="BottomRight"
+                style="position: absolute;top: 100px;right:10px" circle />
+              <el-button @mousedown="toDown(2)" @mouseup="toStop(2)" :icon="Bottom"
+                style="position: absolute;top: 100px;left:44px" circle />
+              <el-button @mousedown="toLeftDown(2)" @mouseup="toStop(2)" :icon="BottomLeft"
+                style="position: absolute;top: 100px;left:0" circle />
+              <el-button @mousedown="toLeft(2)" @mouseup="toStop(2)" :icon="Back"
+                style="position: absolute;top: 50px;left:0" circle />
+              <el-button @mousedown="toZoomIn(2)" @mouseup="toZoomStop(2)"
+                style="position: absolute;top: 150px;left: 0px;">放大</el-button>
+              <el-button @mousedown="toZoomOut(2)" @mouseup="toZoomStop(2)"
+                style="position: absolute;top: 150px;left: 60px;">缩小</el-button>
+              <el-button @mousedown="toFocusIn(2)" @mouseup="toFocusStop(2)"
+                style="position: absolute;top: 190px;left: 0px;">缩聚</el-button>
+              <el-button @mousedown="toFocusOut(2)" @mouseup="toFocusStop(2)"
+                style="position: absolute;top: 190px;left: 60px;">放聚</el-button>
+              <el-button v-show="isConnect2" @click="clickIsConnect(2)"
+                style="position: absolute;top: 50px;left: 32px;">关闭</el-button>
+              <el-button v-show="!isConnect2" @click="clickIsConnect(2)"
+                style="position: absolute;top: 50px;left: 32px;">打开</el-button>
+              <el-button @click="toggleFullScreen2" style="position: absolute;bottom: 10px;left: 1px;">
+                {{ isFullscreen ? '关闭宽屏模式' : '打开宽屏模式' }}
+              </el-button>
+            </div>
           </div>
         </div>
       </div>
@@ -809,7 +933,7 @@ const clickIsConnect = (index) => {
             font-style: italic;
             text-shadow: 2px 2px 4px #000000;
             font-size: 17px;
-          ">草原生物量信息</strong>
+          ">植株生长量数据</strong>
       </div>
       <div class="bottom-center">
         <group1></group1>
@@ -819,6 +943,20 @@ const clickIsConnect = (index) => {
 </template>
 
 <style scoped lang="css">
+#overlay::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  /* 半透明背景 */
+  pointer-events: auto;
+  /* 允许点击事件 */
+}
+
+
 .top {
   display: flex;
   position: relative;

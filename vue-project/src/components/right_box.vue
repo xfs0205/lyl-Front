@@ -4,14 +4,15 @@ import Table from '@/components/Lists/table.vue'
 import group2 from '@/components/groups/group2.vue';
 import weatherdata from '@/assets/weatherData.json'
 import axios from 'axios';
-
+import { useRouter } from 'vue-router';
 
 // 用于存储从服务器获取的数据
 const newData = ref()
 const newData2 = ref()
+const router1 = useRouter();
 // 设置定时器，每隔10秒获取一次数据
 const getData = () =>{
-    axios.get('http://47.102.108.198:8899/get')
+    axios.get('/fsxback/get', { withCredentials: true })
         .then(re => {
             newData.value = {
                 "header": ["日期", "属性", "值"],
@@ -33,7 +34,8 @@ const getData = () =>{
                 "body": [["含水量", re.data.entropy.Water, "正常"], ["温度值", re.data.entropy.Temperature, "正常"], ["电导率", re.data.entropy.ElectricalConductivity, "正常"], ["PH", re.data.entropy.PH, "正常"]], 
             }
         })
-        .catch(error => console.error('Error:', error));
+        .catch(() =>  { router1.push('/login');});
+
 }
 
 let intervalId = null;
