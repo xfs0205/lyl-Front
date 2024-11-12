@@ -64,7 +64,7 @@ onMounted(() => {
 
 
 <template>
-  <div v-if="deviceType">
+  <div>
     <div class="login-container">
       <div class="login-panel" style="
           background-color: rgb(255, 255, 255, 0.1);
@@ -101,9 +101,9 @@ onMounted(() => {
       </div>
     </div>
   </div>
-  <div v-else style="height: 100vh;width: 100vw;display: flex;justify-content: center;align-items: center;">
+  <!-- <div v-else style="height: 100vh;width: 100vw;display: flex;justify-content: center;align-items: center;">
     <span style="color: aqua;">请使用电脑查看！！！</span>
-  </div>
+  </div> -->
 </template>
 
 <style scoped lang="scss">
